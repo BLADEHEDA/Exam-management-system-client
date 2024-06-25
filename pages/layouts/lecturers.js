@@ -1,24 +1,22 @@
 import LayoutHeader from "components/bootstrap/layout-header/LayoutHeader";
 import Link from "next/link";
-import { Col, Row, Container, Image, Button } from "react-bootstrap";
 import { useRouter } from "next/router";
-import Head from "components/bootstrap/student/Head";
-import LecturerBody from "components/bootstrap/lecturer/LecturerBody";
+import Head from "components/bootstrap/student/Head"; 
+import LecturerBody from "components/bootstrap/lecturer/LecturerBody"; 
 import axios from "axios";
 import { useEffect, useState } from "react";
 import LecturerModal from "components/bootstrap/modal/LecturerModal";
-import ConfirmModal from "components/bootstrap/modal/ConfirmModal";
+import ConfirmModal from "components/bootstrap/modal/ConfirmModal"; 
 
 const LayoutVertical = () => {
   const router = useRouter();
   const [lecturers, setLecturers] = useState([]); 
 
-  const [students, setStudents] = useState([])
   const [modalShow, setModalShow] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState()
+  const [selectedLecturer, setSelectedLecturer] = useState(); 
   const [courseDetails, setCourseDetails] = useState([]);
-  const [ShowModal, setShowModal] = useState(false);
-  const [studentToDelete, setStudentToDelete] = useState(null);
+  const [showModal, setShowModal] = useState(false); 
+  const [lecturerToDelete, setLecturerToDelete] = useState(null); 
 
   const addLecturers = () => {
     router.push('/forms/addLecturers');
@@ -46,52 +44,47 @@ const LayoutVertical = () => {
     handleFetchRequest();
   }, []);
 
-    const handleViewLecturer = async (id) => {
-      const chosenStudent = lecturers.find((lecturer) => lecturer._id == id);
-      setSelectedStudent(chosenStudent);
-      
-      try {
-        if (chosenStudent && chosenStudent.courses && chosenStudent.courses.length > 0) {
-          const coursesTaught = await Promise.all(
-            chosenStudent.courses.map(courseId => axios.get(`http://localhost:5000/courses/${courseId}`))
-          );
-          const courseData = coursesTaught.map(course => course.data);
-          console.log(courseData);
-          setCourseDetails(courseData);
-          setModalShow(true);
-        } else {
-          // Handle case where no courses are found
-          setCourseDetails([]);
-          setModalShow(true);
-        }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-        // Handle error condition here, such as setting an error state or showing a message
-      }
-    };
+  const handleViewLecturer = async (id) => {
+    const chosenLecturer = lecturers.find((lecturer) => lecturer._id === id); 
+    setSelectedLecturer(chosenLecturer); 
     
-  
-    // deletet he student
-    const handleDeleteLecturer = (id) => {
-      setStudentToDelete(id)
-      setShowModal(true)
-    }
-    // confirm delete 
-    const handleDeleteConfirm= async()=>{
-      try {
-        const deletedStudents = axios.delete(`http://localhost:5000/students/${studentToDelete}`)
-        setStudents((prevStudents) => prevStudents.filter((student) => student._id !== studentToDelete));
-        setStudentToDelete(null)
+    try {
+      if (chosenLecturer && chosenLecturer.courses && chosenLecturer.courses.length > 0) {
+        const coursesTaught = await Promise.all(
+          chosenLecturer.courses.map(courseId => axios.get(`http://localhost:5000/courses/${courseId}`))
+        );
+        const courseData = coursesTaught.map(course => course.data);
+        console.log(courseData);
+        setCourseDetails(courseData);
+        setModalShow(true);
+      } else {
+        // Handle case where no courses are found
+        setCourseDetails([]);
+        setModalShow(true);
       }
-      catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-      setShowModal(false)
+    } catch (error) {
+      console.error("Error fetching courses:", error);
     }
+  };
   
-console.log('====================================');
-console.log(courseDetails);
-console.log('====================================');
+  // Delete the lecturer
+  const handleDeleteLecturer = (id) => {
+    setLecturerToDelete(id); 
+    setShowModal(true);
+  }
+  
+  // Confirm delete 
+  const handleDeleteConfirm = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/users/${lecturerToDelete}`);
+      setLecturers((prevLecturers) => prevLecturers.filter((lecturer) => lecturer._id !== lecturerToDelete)); // Adjusted variable names
+      setLecturerToDelete(null);
+    } catch (error) {
+      console.error("Error deleting lecturer:", error);
+    }
+    setShowModal(false);
+  }
+
   return (
     <>
       <LayoutHeader
@@ -118,20 +111,19 @@ console.log('====================================');
       ) : (
         <h4 className="p-7">No lecturer is available</h4> 
       )}
-<LecturerModal
-     show={modalShow}
-     onHide={() => setModalShow(false)}
-     data={selectedStudent}
-     courseData={courseDetails}
-/>
-{ShowModal &&
-      <ConfirmModal
-      value='Student'
-      onClose={()=> setShowModal(false)}
-      OnConfirm={()=> handleDeleteConfirm()}
+      <LecturerModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        data={selectedLecturer}
+        courseData={courseDetails}
       />
-    }
-
+      {showModal &&
+        <ConfirmModal
+          value='Lecturer'
+          onClose={() => setShowModal(false)}
+          onConfirm={() => handleDeleteConfirm()}
+        />
+      }
     </>
   );
 };
