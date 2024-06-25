@@ -1,3 +1,15 @@
+// import React from 'react'
+
+// const EditAppointment = () => {
+//   return (
+//     <div>
+      
+//     </div>
+//   )
+// }
+
+// export default EditAppointment
+
 import { useState, useEffect } from "react";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useFormik } from "formik";
@@ -9,7 +21,7 @@ import Toaster from "components/bootstrap/toast/Toaster";
 import { toggleToast } from "util/util";
 import { useSearchParams } from 'next/navigation';
 
-const EditEnrollment = () => {
+const EditAppointment= () => {
     const [showToast, setShowToast] = useState(false);
     const [success, setSuccess] = useState(false);
     const [enrollments, setEnrollments] = useState([]);
@@ -95,7 +107,7 @@ const EditEnrollment = () => {
                             <Form onSubmit={formik.handleSubmit}>
                                 {/* selct student */}
                                 <Form.Group className="mb-3" controlId="student">
-                                    <Form.Label>Student</Form.Label>
+                                    <Form.Label></Form.Label>
                                     <Form.Control
                                         disabled
                                         type="text"
@@ -201,6 +213,9 @@ const EditEnrollment = () => {
     );
 };
 
-EditEnrollment.Layout = AuthLayout;
+EditAppointment.Layout = AuthLayout;
 
-export default EditEnrollment ;
+export default EditAppointment ;
+
+
+

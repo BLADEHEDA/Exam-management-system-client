@@ -30,6 +30,7 @@ const AddLecturers = () => {
             lastname: '',
             email: '',
             password: '',
+            phoneNumber: '',
             confirmPassword: '',
             role: '',
         },
@@ -37,6 +38,7 @@ const AddLecturers = () => {
             firstname: Yup.string().required('First Name is required'),
             lastname: Yup.string().required('Last Name is required'),
             email: Yup.string().email('Invalid email address').required('Email is required'),
+            phoneNumber: Yup.string().required('Phone Number is required'),
             password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
             confirmPassword: Yup.string()
                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -50,9 +52,12 @@ const AddLecturers = () => {
                 lastName: values.lastname,
                 email: values.email,
                 password: values.password,
+                phone_number: values.phoneNumber,
                 role: values.role,
             };
-
+            console.log('====================================');
+            console.log(userData);
+            console.log('====================================');
             try {
                 const response = await axios.post('http://localhost:5000/users', userData);
                 router.push('/layouts/lecturers');
@@ -128,6 +133,24 @@ const AddLecturers = () => {
                                     />
                                     <Form.Control.Feedback type="invalid">
                                         {formik.errors.email}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+
+                                        {/* phone number */}
+                                        <Form.Group className="mb-3" controlId="phoneNumber">
+                                    <Form.Label>Phone number</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="phoneNumber"
+                                        placeholder="Phone number"
+                                        required=""
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        value={formik.values.phoneNumber}
+                                        isInvalid={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        {formik.errors.phoneNumber}
                                     </Form.Control.Feedback>
                                 </Form.Group>
 

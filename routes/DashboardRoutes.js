@@ -35,18 +35,18 @@ export const DashboardMenu = [
 		title: 'Profile',
 		grouptitle: true
 	},
-	{
-		id: uuid(),
-		title: 'Pages',
-		icon: 'layers',
-		children: [
-			{ id: uuid(), link: '/pages/profile', name: 'Profile' },
-			{ id: uuid(), link: '/pages/settings', name: 'Settings'},
-			{ id: uuid(), link: '/pages/billing', name: 'Billing' },
-			{ id: uuid(), link: '/pages/pricing', name: 'Pricing'},
-			{ id: uuid(), link: '/404', name: '404 Error' }
-		]
-	},	
+	// {
+	// 	id: uuid(),
+	// 	title: 'Pages',
+	// 	icon: 'layers',
+	// 	children: [
+	// 		{ id: uuid(), link: '/pages/profile', name: 'Profile' },
+	// 		{ id: uuid(), link: '/pages/settings', name: 'Settings'},
+	// 		{ id: uuid(), link: '/pages/billing', name: 'Billing' },
+	// 		{ id: uuid(), link: '/pages/pricing', name: 'Pricing'},
+	// 		{ id: uuid(), link: '/404', name: '404 Error' }
+	// 	]
+	// },	
 	{
 		id: uuid(),
 		title: 'Users',

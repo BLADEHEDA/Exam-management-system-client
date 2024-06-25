@@ -7,59 +7,66 @@ import axios from "axios";
 import AuthLayout from "layouts/AuthLayout";
 import Toaster from "components/bootstrap/toast/Toaster";
 import { toggleToast } from "util/util";
-import { useSearchParams } from 'next/navigation';
 
-const EditEnrollment = () => {
+const AddEnrollments = () => {
     const [showToast, setShowToast] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [enrollments, setEnrollments] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [errorMessage,setErrorMessage] = useState('')
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const enrolllmentId = searchParams.get('id');
 
-    //get all the enrollments
+    // get the courses
+    const handleFetchCourses = () => {
+        axios
+            .get("http://localhost:5000/courses")
+            .then((response) => {
+                setCourses(response.data);
+            })
+            .catch((error) => {
+                if (error.response) {
+                    console.error(`HTTP error: ${error.response.status}`);
+                } else if (error.request) {
+                    console.error("Request error: No response received");
+                } else {
+                    console.error("Error:", error.message);
+                }
+            });
+    };
+
+    //get all the lecturers 
+    const handleFetchLecturers = () => {
+        axios
+            .get("http://localhost:5000/users")
+            .then((response) => {
+                setStudents(response.data);
+            })
+            .catch((error) => {
+                if (error.response) {
+                    console.error(`HTTP error: ${error.response.status}`);
+                } else if (error.request) {
+                    console.error("Request error: No response received");
+                } else {
+                    console.error("Error:", error.message);
+                }
+            });
+    };
+
     useEffect(() => {
-        if (enrolllmentId) {
-            axios
-                .get(`http://localhost:5000/enrollments/${enrolllmentId}`)
-                .then((response) => {
-                    setEnrollments(response.data);
-                    const { attendanceCount, academicYear, course, student, _id: enrollmentId } = response.data || {};
-                    const { courseName, courseCode, creditValue, department, has_prerequisite, _id: courseId } = course || {};
-                    const { firstName, lastName, email, phone_number, matricule, _id: studentId } = student || {};
-
-                    formik.setValues({
-                        student: `${firstName} ${lastName}` || '',
-                        course: courseName || '',
-                        attendanceCount: attendanceCount || '',
-                        academicYearStart: academicYear?.split('-')[0] || '',
-                        academicYearEnd: academicYear?.split('-')[1] || ''
-                    });
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        console.error(`HTTP error: ${error.response.status}`);
-                    } else if (error.request) {
-                        console.error("Request error: No response received");
-                    } else {
-                        console.error("Error:", error.message);
-                    }
-                });
-        }
-    }, [enrolllmentId]);
+        handleFetchCourses();
+        handleFetchLecturers();
+    }, []);
 
     const formik = useFormik({
         initialValues: {
-            student: '',
+            lecturer: '',
             course: '',
-            attendanceCount: '',
             academicYearStart: '',
             academicYearEnd: ''
         },
         validationSchema: Yup.object({
-            student: Yup.string().required('student is required'),
-            course: Yup.string().required('course is required'),
-            attendanceCount: Yup.string().required('attendance count is required'),
+            lecturer: Yup.string().required('Lecturer is required'),
+            course: Yup.string().required('Course is required'),
             academicYearStart: Yup.number().required('Start year is required').min(2021, 'Invalid year').max(2099, 'Invalid year'),
             academicYearEnd: Yup.number().required('End year is required').min(2021, 'Invalid year').max(2099, 'Invalid year')
         }),
@@ -67,18 +74,21 @@ const EditEnrollment = () => {
             toggleToast(setShowToast);
             const academicYear = `${values.academicYearStart}-${values.academicYearEnd}`;
             const enrollmentData = {
-                matricule: values.student,
-                courseCode: values.course,
-                attendanceCount: values.attendanceCount,
+                lecturerId: values.lecturer,
+                courseId: values.course,
                 academicYear: academicYear
             };
             try {
-                const response = await axios.put(`http://localhost:5000/enrollments/${enrolllmentId}`, enrollmentData);
-                router.push('/layouts/enrollments');
+                const response = await axios.post('http://localhost:5000/lecturercourse', enrollmentData);
+                router.push('/layouts/courses');
                 setSuccess(true);
             } catch (error) {
-                console.error(error);
                 setSuccess(false);
+                if (error.response && error.response.status === 400) {
+                    setErrorMessage('Appointment already exists')
+                } else {
+                    setErrorMessage('Failed to add enrollment, please try again')  
+                }   
             }
         },
     });
@@ -90,59 +100,55 @@ const EditEnrollment = () => {
                     <Card className="smooth-shadow-md">
                         <Card.Body className="p-6">
                             <div className="mb-4">
-                                <p className="mb-6">Please enter the Enrollment informations</p>
+                                <p className="mb-6">Please enter the Enrollment information</p>
                             </div>
                             <Form onSubmit={formik.handleSubmit}>
-                                {/* selct student */}
-                                <Form.Group className="mb-3" controlId="student">
-                                    <Form.Label>Student</Form.Label>
-                                    <Form.Control
-                                        disabled
-                                        type="text"
-                                        name="student"
-                                        placeholder="Enter Student"
+                                {/* select lecturer */}
+                                <Form.Group className="mb-3" controlId="lecturer">
+                                    <Form.Label>Lecturers</Form.Label>
+                                    <Form.Select
+                                        name="lecturer"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        value={formik.values.student}
-                                        isInvalid={formik.touched.student && formik.errors.student}
-                                    />
+                                        value={formik.values.lecturer}
+                                        isInvalid={formik.touched.lecturer && formik.errors.lecturer}
+                                    >
+                                        <option value="">Select Lecturer</option>
+                                        {students && (
+                                            students.map((student, id) => (
+                                                student.role === 'lecturer' &&
+                                                <option key={id} value={student._id}>
+                                                    {student.firstName} {student.lastName}
+                                                </option>
+                                            ))
+                                        )}
+                                    </Form.Select>
                                     <Form.Control.Feedback type="invalid">
-                                        {formik.errors.student}
+                                        {formik.errors.lecturer}
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
-                                {/* select student */}
+                                {/* select course */}
                                 <Form.Group className="mb-3" controlId="course">
-                                    <Form.Label>Course</Form.Label>
-                                    <Form.Control
-                                        disabled
-                                        type="text"
+                                    <Form.Label>Courses</Form.Label>
+                                    <Form.Select
                                         name="course"
-                                        placeholder="Enter Course"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.course}
                                         isInvalid={formik.touched.course && formik.errors.course}
-                                    />
+                                    >
+                                        <option value="">Select Course</option>
+                                        {courses && (
+                                            courses.map((course, id) => (
+                                                <option key={id} value={course._id}>
+                                                    {course.courseName}
+                                                </option>
+                                            ))
+                                        )}
+                                    </Form.Select>
                                     <Form.Control.Feedback type="invalid">
                                         {formik.errors.course}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-
-                                {/* Attendance count */}
-                                <Form.Group className="mb-3" controlId="attendanceCount">
-                                    <Form.Label>Attendance</Form.Label>
-                                    <Form.Control
-                                        type="number"
-                                        name="attendanceCount"
-                                        placeholder="Enter Attendance Count"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.attendanceCount}
-                                        isInvalid={formik.touched.attendanceCount && formik.errors.attendanceCount}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {formik.errors.attendanceCount}
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
@@ -151,7 +157,6 @@ const EditEnrollment = () => {
                                     <Form.Label>Academic Year</Form.Label>
                                     <div>
                                         <Form.Control
-                                            disabled
                                             type="number"
                                             placeholder="Enter start year"
                                             name="academicYearStart"
@@ -163,7 +168,6 @@ const EditEnrollment = () => {
                                             isInvalid={!!formik.errors.academicYearStart}
                                         />
                                         <Form.Control
-                                            disabled
                                             type="number"
                                             placeholder="Enter end year"
                                             name="academicYearEnd"
@@ -182,7 +186,7 @@ const EditEnrollment = () => {
 
                                 <div className="d-grid">
                                     <Button variant="primary" type="submit">
-                                        Add Course
+                                        Add Appointment
                                     </Button>
                                 </div>
                             </Form>
@@ -192,7 +196,7 @@ const EditEnrollment = () => {
             </Row>
             <div className="position-absolute bottom-0 start-0 ms-0 mb-3">
                 <Toaster
-                    message={success ? 'Course successfully added' : 'Failed to add course, please check again'}
+                    message={`${success ? 'Appointment successfully added' : errorMessage}`}
                     showToast={showToast}
                     toggleToast={toggleToast}
                 />
@@ -201,6 +205,6 @@ const EditEnrollment = () => {
     );
 };
 
-EditEnrollment.Layout = AuthLayout;
+AddEnrollments.Layout = AuthLayout;
 
-export default EditEnrollment ;
+export default AddEnrollments;

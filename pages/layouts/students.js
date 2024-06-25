@@ -1,6 +1,5 @@
 import LayoutHeader from "components/bootstrap/layout-header/LayoutHeader";
 import Link from "next/link";
-import { Col, Row, Container, Image, Button, Table } from "react-bootstrap";
 import { useRouter } from "next/router";
 import Student from "components/bootstrap/student/Studentbody";
 import StudentHead from "components/bootstrap/student/Head";

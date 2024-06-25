@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Col, Row, Image } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 
-const EnrollmentBody = ({ data, handleViewEnrollment, handleDeleteEnrollment }) => {
+const EnrollmentBody = ({ data, handleViewEnrollment}) => {
   const {
     student: { firstName, lastName },
     course: { courseName },

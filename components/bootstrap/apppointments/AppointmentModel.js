@@ -1,10 +1,10 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-function EnrollmentModal({ show, onHide, data }) {
-    const { attendanceCount, academicYear, course, student } = data || {};
+function AppointmentModel({ show, onHide, data }) {
+    const {course, lecturer ,academicYear} = data || {};
     const { courseName, courseCode, creditValue, department, has_prerequisite } = course || {};
-    const { firstName, lastName, email, phone_number, matricule } = student || {};
+    const { firstName, lastName, email} = lecturer || {};
     const prerequisites = has_prerequisite ? 'True' : 'False';
 
     return (
@@ -17,16 +17,16 @@ function EnrollmentModal({ show, onHide, data }) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Enrollment Detailed Information
+                    Appointment Detailed Information
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {data ? (
                     <div>
+
                         <div className='my-5'>
                         <h4 className=''>Course Information</h4>
-                            <p>Academic Year: {academicYear} </p>
-                            <p>Attendance Count: {attendanceCount}</p>
+                        <p>Academic Year: {academicYear} </p>
                             <p>Course Name: {courseName} </p>
                             <p>Course Code: {courseCode}</p>
                             <p>Credit Value: {creditValue}</p>
@@ -34,11 +34,9 @@ function EnrollmentModal({ show, onHide, data }) {
                             <p>Has Prerequisite: {prerequisites}</p>
                         </div>
                         <div className='mt-2'>
-                            <h4 className=''>Student Information</h4>
-                            <p>Student Name: {`${firstName} ${lastName}`}</p>
-                            <p>Student Email: {email}</p>
-                            <p>Student Phone Number: {phone_number}</p>
-                            <p>Student Matricule: {matricule}</p>
+                            <h4 className=''>Lecturer Information</h4>
+                            <p>Lecturer Name: {`${firstName} ${lastName}`}</p>
+                            <p>Lecturer Email: {email}</p>
                         </div>
                     </div>
                 ) : (
@@ -49,4 +47,5 @@ function EnrollmentModal({ show, onHide, data }) {
     );
 }
 
-export default EnrollmentModal;
+export default AppointmentModel;
+

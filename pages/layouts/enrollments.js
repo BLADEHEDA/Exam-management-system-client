@@ -1,6 +1,5 @@
 import LayoutHeader from "components/bootstrap/layout-header/LayoutHeader";
 import Link from "next/link";
-import { Col, Row, Container, Image, Button } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Head from "components/bootstrap/student/Head";
@@ -75,7 +74,6 @@ const LayoutVertical = () => {
               key={id}
               data={enrollment}
               handleViewEnrollment={() => handleViewEnrollment(enrollment._id)}
-              handleDeleteEnrollment={()=>  handleDeleteEnrollment(enrollment._id) }
             />
           ))
         ) : (
@@ -88,8 +86,6 @@ const LayoutVertical = () => {
         onHide={() => setModalShow(false)}
         data={enrollments.length > 0 ? specificEnrollments : null}
       />
-      <>
-      </>
     </>
   );
 };
