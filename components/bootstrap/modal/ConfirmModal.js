@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function ConfirmModal({value,onClose,OnConfirm}) {
+function ConfirmModal({value,onClose,onConfirm}) {
   return (
     <div
       className="modal show"
@@ -18,7 +18,7 @@ function ConfirmModal({value,onClose,OnConfirm}) {
 
         <Modal.Footer>
           <Button variant="primary" onClick={onClose}>Cancel</Button>
-          <Button variant="danger" onClick={OnConfirm}>Delete</Button>
+          <Button variant="danger" onClick={onConfirm}>Delete</Button>
         </Modal.Footer>
       </Modal.Dialog>
     </div>

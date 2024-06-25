@@ -11,12 +11,11 @@ import ConfirmModal from "components/bootstrap/modal/ConfirmModal";
 const LayoutVertical = () => {
   const router = useRouter();
   const [lecturers, setLecturers] = useState([]); 
-
   const [modalShow, setModalShow] = useState(false);
   const [selectedLecturer, setSelectedLecturer] = useState(); 
   const [courseDetails, setCourseDetails] = useState([]);
   const [showModal, setShowModal] = useState(false); 
-  const [lecturerToDelete, setLecturerToDelete] = useState(null); 
+  const [lecturerToDelete, setLecturerToDelete] = useState(); 
 
   const addLecturers = () => {
     router.push('/forms/addLecturers');
@@ -54,7 +53,6 @@ const LayoutVertical = () => {
           chosenLecturer.courses.map(courseId => axios.get(`http://localhost:5000/courses/${courseId}`))
         );
         const courseData = coursesTaught.map(course => course.data);
-        console.log(courseData);
         setCourseDetails(courseData);
         setModalShow(true);
       } else {
@@ -74,10 +72,10 @@ const LayoutVertical = () => {
   }
   
   // Confirm delete 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = async() => {
     try {
       await axios.delete(`http://localhost:5000/users/${lecturerToDelete}`);
-      setLecturers((prevLecturers) => prevLecturers.filter((lecturer) => lecturer._id !== lecturerToDelete)); // Adjusted variable names
+      setLecturers((prevLecturers) => prevLecturers.filter((lecturer) => lecturer._id !== lecturerToDelete));
       setLecturerToDelete(null);
     } catch (error) {
       console.error("Error deleting lecturer:", error);
@@ -121,7 +119,7 @@ const LayoutVertical = () => {
         <ConfirmModal
           value='Lecturer'
           onClose={() => setShowModal(false)}
-          onConfirm={() => handleDeleteConfirm()}
+          onConfirm={handleDeleteConfirm}
         />
       }
     </>

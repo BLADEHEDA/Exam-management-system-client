@@ -1,71 +1,87 @@
-import { useState } from "react";
-import { Row, Col, Card, Form, Button, Image } from "react-bootstrap";
-import Link from "next/link";
-import * as Icon from 'react-bootstrap-icons';
+import { useState, useEffect } from "react";
+import { Row, Col, Card, Form, Button } from "react-bootstrap";
 import AuthLayout from "layouts/AuthLayout";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import axios from "axios";
 import Toaster from "components/bootstrap/toast/Toaster";
-import { toggleToast } from "util/util";
+import * as Icon from 'react-bootstrap-icons';
 
-const AddLecturers = () => {
+const EditLecturer = () => {
     const [showToast, setShowToast] = useState(false);
-    const [success, setSuccess] = useState(false)
+    const [success, setSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const router = useRouter();
+    const [userData, setUserData] = useState(null);
 
-    const togglePasswordVisibility = () => { 
+    const router = useRouter();
+    const { id: userId } = router.query; // Extract id from router query
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (userId) {
+                    const response = await axios.get(`http://localhost:5000/users/${userId}`);
+                    const data = response.data;
+                    setUserData(data);
+                    // Set formik initial values
+                    formik.setValues({
+                        firstname: data.firstName || "",
+                        lastname: data.lastName || "",
+                        email: data.email || "",
+                        phoneNumber: data.phone_number || "",
+                        role: data.role || "",
+                        password: "", 
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchData();
+    }, [userId]);
+
+    const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
-    const toggleConfirmPasswordVisibility = () => { 
+
+    const toggleConfirmPasswordVisibility = () => {
         setShowConfirmPassword(!showConfirmPassword);
     };
 
     const formik = useFormik({
         initialValues: {
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: '',
-            phoneNumber: '',
-            confirmPassword: '',
-            role: '',
+            firstname: "",
+            lastname: "",
+            email: "",
+            phoneNumber: "",
+            role: "",
+            password: "",
         },
         validationSchema: Yup.object({
-            firstname: Yup.string().required('First Name is required'),
-            lastname: Yup.string().required('Last Name is required'),
-            email: Yup.string().email('Invalid email address').required('Email is required'),
-            phoneNumber: Yup.string().required('Phone Number is required'),
-            password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
-            confirmPassword: Yup.string()
-                .oneOf([Yup.ref('password'), null], 'Passwords must match')
-                .required('Confirm Password is required'),
-            role: Yup.string().required('Department is required'),
+            firstname: Yup.string().required("First Name is required"),
+            lastname: Yup.string().required("Last Name is required"),
+            email: Yup.string().email("Invalid email address").required("Email is required"),
+            phoneNumber: Yup.string().required("Phone Number is required"),
+            password: Yup.string()
+                .required("Password is required")
+                .min(8, "Password must be at least 8 characters"),
+            role: Yup.string().required("Role is required"),
         }),
         onSubmit: async (values) => {
-            toggleToast(setShowToast);
-            const userData = {
-                firstName: values.firstname,
-                lastName: values.lastname,
-                email: values.email,
-                password: values.password,
-                phone_number: values.phoneNumber,
-                role: values.role,
-            };
             try {
-                const response = await axios.post('http://localhost:5000/users', userData);
+                const response = await axios.put(`http://localhost:5000/users/${userId}`, values);
                 router.push('/layouts/lecturers');
                 setSuccess(true);
             } catch (error) {
-                console.error(error);
+                console.error("Error updating user:", error);
                 setSuccess(false);
             }
         },
     });
- 
+
     return (
         <div className="position-relative">
             <Row className="align-items-center justify-content-center g-0 min-vh-100 my-10">
@@ -86,7 +102,6 @@ const AddLecturers = () => {
                                         type="text"
                                         name="firstname"
                                         placeholder="First Name"
-                                        required=""
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.firstname}
@@ -104,7 +119,6 @@ const AddLecturers = () => {
                                         type="text"
                                         name="lastname"
                                         placeholder="Last Name"
-                                        required=""
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.lastname}
@@ -121,8 +135,7 @@ const AddLecturers = () => {
                                     <Form.Control
                                         type="email"
                                         name="email"
-                                        placeholder="Enter address here"
-                                        required=""
+                                        placeholder="Enter email"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.email}
@@ -133,14 +146,13 @@ const AddLecturers = () => {
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
-                                        {/* phone number */}
-                                        <Form.Group className="mb-3" controlId="phoneNumber">
-                                    <Form.Label>Phone number</Form.Label>
+                                {/* Phone number */}
+                                <Form.Group className="mb-3" controlId="phoneNumber">
+                                    <Form.Label>Phone Number</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="phoneNumber"
-                                        placeholder="Phone number"
-                                        required=""
+                                        placeholder="Phone Number"
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.phoneNumber}
@@ -186,43 +198,7 @@ const AddLecturers = () => {
                                         </Form.Control.Feedback>
                                     </div>
                                 </Form.Group>
-
-                                    {/*Confirm Password */}
-                                    <Form.Group className="mb-3" controlId="confirmPassword">
-                                    <Form.Label>Confirm Password</Form.Label>
-                                    <div className="input-group">
-                                        <Form.Control
-                                            type={showConfirmPassword ? "text" : "password"}
-                                            name="confirmPassword"
-                                            placeholder="**************"
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            value={formik.values.confirmPassword}
-                                            isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                                        />
-                                        <button
-                                            type="button"
-                                            variant="outline-primary"
-                                            onClick={toggleConfirmPasswordVisibility}
-                                            style={{
-                                                borderColor: '#C4CDD5',
-                                                borderWidth: '1px',
-                                                borderStyle: 'solid',
-                                                background: 'transparent'
-                                            }}
-                                        >
-                                            {showConfirmPassword ? (
-                                                <Icon.EyeSlash />
-                                            ) : (
-                                                <Icon.Eye />
-                                            )}
-                                        </button>
-                                        <Form.Control.Feedback type="invalid">
-                                            {formik.errors.confirmPassword}
-                                        </Form.Control.Feedback>
-                                    </div>
-                                </Form.Group>
-                                    
+                                {/* Role */}
                                 <Form.Group className="mb-3" controlId="role">
                                     <Form.Label>Role</Form.Label>
                                     <Form.Select
@@ -232,40 +208,39 @@ const AddLecturers = () => {
                                         value={formik.values.role}
                                         isInvalid={formik.touched.role && formik.errors.role}
                                     >
-                                        <option value="">Select Department</option>
+                                        <option value="">Select Role</option>
                                         <option value="admin">Admin</option>
                                         <option value="lecturer">Lecturer</option>
                                         <option value="staff">Administrative Staff</option>
                                     </Form.Select>
                                     <Form.Control.Feedback type="invalid">
-                                        {formik.errors.department}
+                                        {formik.errors.role}
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
-                                <div>
-                                    {/* Button */}
-                                    <div className="d-grid">
-                                        <Button variant="primary" type="submit">
-                                            Add users
-                                        </Button>
-                                    </div>
+                                {/* Submit Button */}
+                                <div className="d-grid">
+                                    <Button variant="primary" type="submit">
+                                        Update User
+                                    </Button>
                                 </div>
                             </Form>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
-            <div class="position-absolute bottom-0 start-0 ms-0 mb-3">
+            {/* Toast Notification */}
+            <div className="position-absolute bottom-0 start-0 ms-0 mb-3">
                 <Toaster
-                    message={success ? 'Studdent successfully added' : ' Failed to Add student,Check again'}
+                    message={success ? 'User successfully updated' : 'Failed to update user'}
                     showToast={showToast}
-                    toggleToast={toggleToast}
+                    toggleToast={setShowToast}
                 />
             </div>
         </div>
     );
 };
 
-AddLecturers.Layout = AuthLayout;
+EditLecturer.Layout = AuthLayout;
 
-export default AddLecturers;
+export default EditLecturer;

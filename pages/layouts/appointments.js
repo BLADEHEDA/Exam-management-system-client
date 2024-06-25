@@ -22,7 +22,6 @@ const LayoutVertical = () => {
     try {
       const response = await axios.get("http://localhost:5000/lecturerCourse");
       setAppointments(response.data);
-      console.log(response.data);
     } catch (error) {
       if (error.response) {
         console.error(`HTTP error: ${error.response.status}`);

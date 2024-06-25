@@ -37,7 +37,7 @@ const LecturerBody = ({ data , handleViewStudent,handleDeleteStudent}) => {
                             </button>
                             <Link
                             href={{
-                                pathname:'/forms/EditStudent',
+                                pathname:'/forms/EditLecturer',
                                 query:{
                                   id: _id 
                                 }

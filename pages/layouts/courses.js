@@ -121,7 +121,7 @@ const LayoutVertical = () => {
       <ConfirmModal
       value='Course'
       onClose={()=> setShowModal(false)}
-      OnConfirm={()=> handleDeleteConfirm()}
+      onConfirm={()=> handleDeleteConfirm()}
       />
     }
       </>

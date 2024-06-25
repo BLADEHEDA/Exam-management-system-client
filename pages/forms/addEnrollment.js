@@ -7,6 +7,7 @@ import axios from "axios";
 import AuthLayout from "layouts/AuthLayout";
 import Toaster from "components/bootstrap/toast/Toaster";
 import { toggleToast } from "util/util";
+import { useSearchParams } from 'next/navigation'
 
 const AddEnrollments = () => {
     const [showToast, setShowToast] = useState(false);
@@ -15,6 +16,8 @@ const AddEnrollments = () => {
     const [students, setStudents] = useState([]);
     const router = useRouter();
 
+    const searchParams = useSearchParams()
+    const userId = searchParams.get('id')
     // get the courses
     const handleFetchCourses = () => {
         axios
