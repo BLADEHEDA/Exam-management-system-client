@@ -2,11 +2,11 @@ import LayoutHeader from "components/bootstrap/layout-header/LayoutHeader";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Head from "components/bootstrap/student/Head";
 import axios from "axios";
 import EnrollmentBody from "components/bootstrap/enrollment/EnrollmentBody";
-import EnrollmentModal from "components/bootstrap/enrollment/EnrollmentModal";
 import ConfirmModal from "components/bootstrap/modal/ConfirmModal";
+import HeadExams from "components/bootstrap/student/HeadExams";
+import ExaminationModal from "components/bootstrap/examination/ExaminationModal";
 
 const LayoutVertical = () => {
   const router = useRouter();
@@ -14,14 +14,14 @@ const LayoutVertical = () => {
   const [specificEnrollments, setspecificEnrollments] = useState([]);
   const [modalShow, setModalShow] = useState(false);
 
-  const addEnrollments = () => {
-    router.push('/forms/addEnrollment');
+  const addExaminations = () => {
+    router.push('/forms/addExamination');
   }
 
   // Get all the enrollments
-  const handleFetchEnrollments = async () => {
+  const handleFetchExaminations = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/enrollments");
+      const response = await axios.get("http://localhost:5000/examinations");
       setEnrollments(response.data);
     } catch (error) {
       if (error.response) {
@@ -35,14 +35,13 @@ const LayoutVertical = () => {
   }
 
   useEffect(() => {
-    handleFetchEnrollments();
+    handleFetchExaminations();
   }, []);
 
-  const handleViewEnrollment = async (id) => {
+  const handleViewExaminations = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/enrollments/${id}`);
+      const response = await axios.get(`http://localhost:5000/examinations/${id}`);
       setspecificEnrollments(response.data);
-      console.log('the enrollment',response.data);
     } catch (error) {
       if (error.response) {
         console.error(`HTTP error: ${error.response.status}`);
@@ -52,20 +51,20 @@ const LayoutVertical = () => {
         console.error("Error:", error.message);
       }
     }
-    // setModalShow(true);
+    setModalShow(true);
   };
 
   return (
     <>
       <LayoutHeader
-        header='Enrollments'
-        buttonText='Enrollment'
-        onClick={addEnrollments}
+        header='Examinations'
+        buttonText='Examination'
+        onClick={addExaminations}
       />
-      <Head
-        name='Student'
-        number='Attendance Count'
-        value='Course'
+      <HeadExams
+          name='Student'
+          number='CA '
+          value='Course'
       />
 
       <div className="mt-2">
@@ -74,7 +73,7 @@ const LayoutVertical = () => {
             <EnrollmentBody
               key={id}
               data={enrollment}
-              handleViewEnrollment={() => handleViewEnrollment(enrollment._id)}
+              handleViewEnrollment={() => handleViewExaminations(enrollment._id)}
             />
           ))
         ) : (
@@ -82,11 +81,11 @@ const LayoutVertical = () => {
         )}
       </div>
     {/* Modal for displaying detailed information */}
-    <EnrollmentModal
+    <ExaminationModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         data={enrollments.length > 0 ? specificEnrollments : null}
-      />
+      /> 
     </>
   );
 };

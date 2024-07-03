@@ -1,10 +1,21 @@
 import Link from 'next/link';
 import { Col, Row,Image } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
+import { useEffect, useState } from "react";
 
 const Student = ({ data , handleViewStudent,handleDeleteStudent}) => {
     const { firstName, lastName, email, phone_number, image, matricule, _id} = data
     const name = `${firstName} ${lastName}`;
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+      const auth = localStorage.getItem('credentials');
+      const userRole = JSON.parse(auth).role
+      if (userRole ==='admin') {
+        setIsAuthenticated(true);
+      }
+    }, []);
 
     return (
         <div className='mx-6' >
@@ -51,7 +62,9 @@ const Student = ({ data , handleViewStudent,handleDeleteStudent}) => {
                             >
                                 <Icon.Eye className="text-white" />
                             </button>
-                            <Link
+                            {isAuthenticated && (
+                                <>
+                                <Link
                             href={{
                                 pathname:'/forms/EditStudent',
                                 query:{
@@ -75,6 +88,9 @@ const Student = ({ data , handleViewStudent,handleDeleteStudent}) => {
                             >
                                 <Icon.Trash className="text-white" />
                             </button>
+                                </>
+                            )
+                            }
                         </div>
                     </div>
                 </div>

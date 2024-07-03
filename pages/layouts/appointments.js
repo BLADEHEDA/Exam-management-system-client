@@ -76,7 +76,7 @@ const LayoutVertical = () => {
             />
           ))
         ) : (
-          <h4 className="p-7">No courses are available</h4>
+          <h4 className="p-7">No Appointment are available</h4>
         )}
       </div>
  {/* display the modal  to view the detailed information*/}

@@ -46,8 +46,9 @@ const SignIn = () => {
       };
       try{
         const response = await axios.post('http://localhost:5000/login', loginFormValues);
-        const { email } = response.data.user;
-        localStorage.setItem('credentials', email);
+        const { email,role } = response.data.user;
+        const userData ={email,role};
+        localStorage.setItem('credentials',JSON.stringify(userData));
         setIsAuthenticated(true)
          router.push('/layouts/home');
         window.location.reload();

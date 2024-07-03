@@ -1,10 +1,21 @@
 import Link from 'next/link';
 import { Col, Row,Image } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
+import { useEffect, useState } from "react";
 
 const LecturerBody = ({ data , handleViewStudent,handleDeleteStudent}) => {
     const { firstName, lastName, email, phone_number, image, _id} = data
     const name = `${firstName} ${lastName}`;
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+      const auth = localStorage.getItem('credentials');
+      const userRole = JSON.parse(auth).role
+      if (userRole ==='admin') {
+        setIsAuthenticated(true);
+      }
+    }, []);
+  
 
     return (
         <div className='mx-6' >
@@ -35,30 +46,36 @@ const LecturerBody = ({ data , handleViewStudent,handleDeleteStudent}) => {
                             >
                                 <Icon.Eye className="text-white" />
                             </button>
-                            <Link
-                            href={{
-                                pathname:'/forms/EditLecturer',
-                                query:{
-                                  id: _id 
-                                }
-                            }}
-                            >
-                            <button
-                                type="button"
-                                variant="outline-primary"
-                                className='border bg-primary rounded px-2'
-                            >
-                                <Icon.PencilFill className="text-white" />
-                            </button>
-                            </Link>
-                            <button
-                            onClick={handleDeleteStudent}
-                                type="button"
-                                variant="outline-primary"
-                                className='border bg-danger rounded px-2'
-                            >
-                                <Icon.Trash className="text-white" />
-                            </button>
+                            {isAuthenticated &&
+(<>
+    <Link
+    href={{
+        pathname:'/forms/EditLecturer',
+        query:{
+          id: _id 
+        }
+    }}
+    >
+    <button
+        type="button"
+        variant="outline-primary"
+        className='border bg-primary rounded px-2'
+    >
+        <Icon.PencilFill className="text-white" />
+    </button>
+    </Link>
+    <button
+    onClick={handleDeleteStudent}
+        type="button"
+        variant="outline-primary"
+        className='border bg-danger rounded px-2'
+    >
+        <Icon.Trash className="text-white" />
+    </button>
+    </>
+)
+                            }
+                         
                         </div>
                     </div>
                 </div>

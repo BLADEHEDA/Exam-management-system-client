@@ -1,9 +1,19 @@
 import Link from 'next/link';
 import { Col, Row, Image } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
+import { useEffect, useState } from "react";
 
 const CourseBody = ({ data, handleViewCourse, handleDeleteCourse }) => {
     const { courseName, courseCode, creditValue, _id } = data;
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+      const auth = localStorage.getItem('credentials');
+      const userRole = JSON.parse(auth).role
+      if (userRole ==='admin') {
+        setIsAuthenticated(true);
+      }
+    }, []);
 
     return (
         <div className='mx-4'>
@@ -27,30 +37,35 @@ const CourseBody = ({ data, handleViewCourse, handleDeleteCourse }) => {
                             >
                                 <Icon.Eye className="text-white" />
                             </button>
-                            <Link
-                                href={{
-                                    pathname: '/forms/EditCourse',
-                                    query: {
-                                        id: _id
-                                    }
-                                }}
+                            {isAuthenticated && (
+                                <>
+                                <Link
+                            href={{
+                                pathname: '/forms/EditCourse',
+                                query:{
+                                  id: _id 
+                                }
+                            }}
                             >
-    
-                                    <button
-                                        type="button"
-                                        className='border bg-primary rounded px-2'
-                                    >
-                                        <Icon.PencilFill className="text-white" />
-                                    </button>
-    
+                            <button
+                                type="button"
+                                variant="outline-primary"
+                                className='border bg-primary rounded px-2'
+                            >
+                                <Icon.PencilFill className="text-white" />
+                            </button>
                             </Link>
                             <button
-                                onClick={handleDeleteCourse}
+                            onClick={handleDeleteCourse}
                                 type="button"
+                                variant="outline-primary"
                                 className='border bg-danger rounded px-2'
                             >
                                 <Icon.Trash className="text-white" />
                             </button>
+                                </>
+                            )
+                            }
                         </div>
                     </div>
                 </div>
