@@ -13,6 +13,7 @@ const LayoutVertical = () => {
   const [enrollments, setEnrollments] = useState([]);
   const [specificEnrollments, setspecificEnrollments] = useState([]);
   const [modalShow, setModalShow] = useState(false);
+  const [semester,setSemester] = useState('first_semester');
 
   const addExaminations = () => {
     router.push('/forms/addExamination');
@@ -54,6 +55,19 @@ const LayoutVertical = () => {
     setModalShow(true);
   };
 
+  const handleOptions = (e)=>{
+    const selctedOption = e.target.value;
+    if(selctedOption ==='1'){
+      setSemester('first_semester')
+    }
+    else if(selctedOption ==='2') {
+      setSemester('second_semester')
+    }
+    else{
+      setSemester('resit_semester')
+    }
+    
+  }
   return (
     <>
       <LayoutHeader
@@ -61,31 +75,69 @@ const LayoutVertical = () => {
         buttonText='Examination'
         onClick={addExaminations}
       />
-      <HeadExams
+      <div>
+        {/* <h3 className="ms-6 my-2" >First Semester </h3> */}
+        {/* select */}
+        <select onChange={handleOptions} class="form-select mb-3 w-30 ms-6" aria-label="Default select example">
+          <option selected>Select Semester</option>
+          <option value="1" >First Semester</option>
+          <option value="2">Second Semester</option>
+          <option value="3">Resit Semester</option>
+        </select>
+        {/* end of select */}
+        <HeadExams
           name='Student'
           number='CA '
           value='Course'
-      />
+        />
+        {/* <div className="mt-2">
+          {enrollments && enrollments.length > 0 ? (
+            enrollments.map((enrollment, id) => (
+              enrollment.semester === semester && (
+                enrollment.length < 0 ? (
+                  <EnrollmentBody
+                  key={id}
+                  data={enrollment}
+                  handleViewEnrollment={() => handleViewExaminations(enrollment._id)}
+                />
+                ):(
+                  <h4 className="p-7">No No Results for this Semester</h4>
+                )
+              )
+          
+            ))
+          ) : (
+            <h4 className="p-7">No Results are available</h4>
+          )}
+        </div> */}
 
-      <div className="mt-2">
-        {enrollments && enrollments.length > 0 ? (
-          enrollments.map((enrollment, id) => (
-            <EnrollmentBody
-              key={id}
-              data={enrollment}
-              handleViewEnrollment={() => handleViewExaminations(enrollment._id)}
-            />
-          ))
-        ) : (
-          <h4 className="p-7">No Enrolments are available</h4>
-        )}
+<div className="mt-2">
+          {enrollments.length > 0 ? (
+            enrollments.map((enrollment, id) => (
+              enrollment.semester === semester ? (
+                <EnrollmentBody
+                  key={id}
+                  data={enrollment}
+                  handleViewEnrollment={() => handleViewExaminations(enrollment._id)}
+                />
+              ) : null
+            ))
+          ) : (
+            <h4 className="p-7">No Results are available</h4>
+          )}
+          {enrollments.length > 0 && enrollments.filter(enrollment => enrollment.semester === semester).length === 0 && (
+            <h4 className="p-7">No Results for this Semester</h4>
+          )}
+        </div>
+        
       </div>
-    {/* Modal for displaying detailed information */}
-    <ExaminationModal
+
+      {/* Modal for displaying detailed information */}
+      <ExaminationModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         data={enrollments.length > 0 ? specificEnrollments : null}
-      /> 
+      />
     </>
   );
 };

@@ -52,7 +52,7 @@ const LayoutVertical = () => {
         console.error("Error:", error.message);
       }
     }
-    // setModalShow(true);
+     setModalShow(true);
   };
 
   return (
