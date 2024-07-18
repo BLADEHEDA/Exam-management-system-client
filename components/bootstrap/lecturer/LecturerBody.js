@@ -20,7 +20,7 @@ const LecturerBody = ({ data , handleViewStudent,handleDeleteStudent}) => {
     return (
         <div className='mx-6' >
             <div className="container">
-                <div className="row">
+                <div className="row mb-3">
                     <div className="col-3 d-flex justify-content-start">
                         <div className="d-flex align-items-center w-100">
                             <div className="ms-3 lh-1">

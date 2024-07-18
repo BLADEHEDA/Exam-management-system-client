@@ -13,7 +13,7 @@ const AppointmentBody = ({ data, handleViewAppointment}) => {
   return (
     <div className='mx-4'>
       <div className="container">
-        <div className="row">
+        <div className="row mb-3">
           <div className="col-3 d-flex justify-content-center align-items-center">
             {firstName} {lastName}
           </div>

@@ -18,7 +18,7 @@ const CourseBody = ({ data, handleViewCourse, handleDeleteCourse }) => {
     return (
         <div className='mx-4'>
             <div className="container">
-                <div className="row">
+                <div className="row mb-3">
                       <div className="col-4 d-flex justify-content-start align-items-center">
                       {courseName}
                     </div>

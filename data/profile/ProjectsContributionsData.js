@@ -37,7 +37,7 @@ export const ProjectsContributionsData = [
     },
     {
         id: 4,
-        projectName: "Dropbox Design System",
+        projectName: "Nkemeni Valery",
         description: "Project description and details about...",
         brandLogo: '/images/brand/dropbox-logo.svg',
         brandLogoBg: 'bg-white',

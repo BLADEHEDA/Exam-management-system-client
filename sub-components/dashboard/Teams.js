@@ -48,7 +48,7 @@ const Teams = () => {
     return (
         <Card className="h-100">
             <Card.Header className="bg-white py-4">
-                <h4 className="mb-0">Teams </h4>
+                <h4 className="mb-0">Lecturers </h4>
             </Card.Header>
             <Table responsive className="text-nowrap">
                 <thead className="table-light">

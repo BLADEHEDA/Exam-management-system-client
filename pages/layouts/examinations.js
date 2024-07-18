@@ -23,10 +23,10 @@ const LayoutVertical = () => {
     try {
       const response = await axios.get("http://localhost:5000/examinations");
       setEnrollments(response.data);
-      setLoading(false); // Set loading to false once enrollments are fetched
+      setLoading(false); 
     } catch (error) {
       console.error("Error fetching enrollments:", error.message);
-      setLoading(false); // Set loading to false on error as well
+      setLoading(false); 
     }
   };
 
