@@ -1,27 +1,22 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function ConfirmModal({value,onClose,onConfirm}) {
+function ConfirmModal({ value, onClose, onConfirm }) {
   return (
-    <div
-      className="modal show"
-      style={{ display: 'block', position: 'initial' }}
-    >
-      <Modal.Dialog>
-        <Modal.Header closeButton onClick={onClose} >
-          <Modal.Title>Delete {value} </Modal.Title>
-        </Modal.Header>
+    <Modal show centered onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Delete {value}</Modal.Title>
+      </Modal.Header>
 
-        <Modal.Body>
-          <p>Are you sure you want to delete this {value} </p>
-        </Modal.Body>
+      <Modal.Body>
+        <p>Are you sure you want to delete this {value}?</p>
+      </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="primary" onClick={onClose}>Cancel</Button>
-          <Button variant="danger" onClick={onConfirm}>Delete</Button>
-        </Modal.Footer>
-      </Modal.Dialog>
-    </div>
+      <Modal.Footer>
+        <Button variant="primary" onClick={onClose}>Cancel</Button>
+        <Button variant="danger" onClick={onConfirm}>Delete</Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
