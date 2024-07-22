@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import Toaster from "components/bootstrap/toast/Toaster";
 import { toggleToast } from "util/util";
+import PdfUpload from "components/pdf-upload'/PdfUpload";
 
 const AddStudents = () => {
     const [showToast, setShowToast] = useState(false);
@@ -199,6 +200,7 @@ const AddStudents = () => {
                                     </div>
                                 </div>
                             </Form>
+                            <PdfUpload/>
                         </Card.Body>
                     </Card>
                 </Col>
