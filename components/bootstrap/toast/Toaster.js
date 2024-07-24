@@ -3,7 +3,7 @@ import { Toast } from 'react-bootstrap';
 
 const Toaster = ({showToast,toggleToast,message}) => {
   return (
-    <div>
+    <div className='d-flex justify-content-center align-items-center vh-100' >
               <Toast 
         show={showToast} onClose={toggleToast}
         >

@@ -93,7 +93,7 @@ const TasksPerformance = () => {
             <Card.Body>
                 <div className="d-flex align-items-center justify-content-between">
                     <div>
-                        <h4 className="mb-0">Semester Performance </h4>
+                        <h4 className="mb-0">Student Stats </h4>
                     </div>
                     <ActionMenu />
                 </div>
@@ -104,18 +104,8 @@ const TasksPerformance = () => {
                 <div className="d-flex align-items-center justify-content-around">
                     <div className="text-center">
                         <i className="fe fe-check-circle text-success fs-3"></i>
-                        <h1 className="mt-3  mb-1 fw-bold">76%</h1>
+                        <h1 className="mt-3  mb-1 fw-bold">21%</h1>
                         <p>Completed</p>
-                    </div>
-                    <div className="text-center">
-                        <i className="fe fe-trending-up text-warning fs-3"></i>
-                        <h1 className="mt-3  mb-1 fw-bold">32%</h1>
-                        <p>In-Progress</p>
-                    </div>
-                    <div className="text-center">
-                        <i className="fe fe-trending-down text-danger fs-3"></i>
-                        <h1 className="mt-3  mb-1 fw-bold">13%</h1>
-                        <p>Behind</p>
                     </div>
                 </div>
             </Card.Body>

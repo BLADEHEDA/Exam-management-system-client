@@ -54,9 +54,6 @@ const handleFileUpload = async () => {
         setError('An error occurred while uploading the text.');
     }
 };
-
-
-
     return (
         <div className="mt-4">
             <div className="mb-2">
@@ -64,7 +61,7 @@ const handleFileUpload = async () => {
             </div>
             <div className="d-grid">
                 <Button variant="primary" type="submit" onClick={handleFileUpload}>
-                    Add Student from document
+                    Add multiple students
                 </Button>
             </div>
             {success && <Alert variant="success" className="mt-3">{success}</Alert>}

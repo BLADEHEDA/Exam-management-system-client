@@ -80,6 +80,7 @@ const LayoutVertical = () => {
     } catch (error) {
       console.error("Error deleting lecturer:", error);
     }
+    
     setShowModal(false);
   }
 

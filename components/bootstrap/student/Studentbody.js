@@ -19,26 +19,10 @@ const Student = ({ data , handleViewStudent,handleDeleteStudent}) => {
 
     return (
         <div className='mx-6' >
-            <div className="container">
+            <div className="container mb-2">
                 <div className="row">
                     <div className="col-3 d-flex justify-content-start">
                         <div className="d-flex align-items-center w-100">
-                            <div>
-                                <div>
-                                    <div className={`icon-shape icon-md p-4 rounded-1 bg-white`}>
-                                    <Image 
-                                            style={{
-                                                width: '40px', 
-                                                height: '40px', 
-                                                objectFit: 'cover', 
-                                                borderRadius: '50%'
-                                            }} 
-                                            src={image} 
-                                            alt="" 
-                                        />
-                                    </div>
-                                </div>
-                            </div>
                             <div className="ms-3 lh-1">
                                 <h5 className="mb-1 text-truncate">
                                     <Link href="#" className="text-inherit">{name}</Link>

@@ -80,7 +80,7 @@ const AddEnrollments = () => {
             };
             try {
                 const response = await axios.post('http://localhost:5000/lecturercourse', enrollmentData);
-                router.push('/layouts/courses');
+                router.push('/layouts/appointments');
                 setSuccess(true);
             } catch (error) {
                 setSuccess(false);

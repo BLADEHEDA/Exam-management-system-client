@@ -9,30 +9,26 @@ export const ProjectsStats = [
     {
        id:1,
        title : "Students",
-       value : 18,
+       value : 19,
        icon: <Briefcase size={18}/>,
-       statInfo: '<span className="text-dark me-2">2</span> Completed' 
     },
     {
         id:2,
         title : "Courses",
-        value : 10,
+        value : 7,
         icon: <ListTask size={18}/>,
-        statInfo: '<span className="text-dark me-2">28</span> Completed' 
      },
      {
         id:3,
         title : "Lecturers",
-        value : 12,
+        value : 5,
         icon: <People size={18}/>,
-        statInfo: '<span className="text-dark me-2">1</span> Completed' 
      },
      {
         id:4,
         title : "Enrollments",
-        value : '76%',
+        value : '4',
         icon: <Bullseye size={18}/>,
-        statInfo: '<span className="text-dark me-2">5%</span> Completed' 
      }
 ];
 export default ProjectsStats;

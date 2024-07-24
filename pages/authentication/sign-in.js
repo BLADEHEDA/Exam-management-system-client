@@ -61,10 +61,12 @@ const SignIn = () => {
   });
 
   return (
-    <Row className="align-items-center justify-content-center g-0 min-vh-100">
+ 
+  <div className="position-relative me-0 ">
+  <Row className="align-items-center justify-content-center g-0 min-vh-100 my-5">
       <Col xxl={4} lg={6} md={8} xs={12} className="py-8 py-xl-0">
-        {/* Card */}
-        <Card className="smooth-shadow-md">
+          {/* Card */}
+          <Card className="smooth-shadow-md">
           <Card.Body className="p-6">
             <div className="mb-4">
               <p className="mb-6 text-center">Please enter your user information.</p>
@@ -121,6 +123,7 @@ const SignIn = () => {
                   </Form.Control.Feedback>
                 </div>
               </Form.Group>
+             
 
               {/* Checkbox */}
               <div className="d-lg-flex justify-content-between align-items-center mb-4">
@@ -165,16 +168,17 @@ const SignIn = () => {
             </Form>
           </Card.Body>
         </Card>
+ 
       </Col>
-
-  <div class="position-absolute top-0 start-80 ms-3 mt-2">
+  </Row>
+  <div class="position-absolute bottom-0 start-0 ms-0 mb-3">
   <Toaster
         message={isAuthenticated?'Login successfully': 'Login Failed, Check Credentials again'}
         showToast={showToast}
         toggleToast={toggleToast}
         />
   </div>
-    </Row>
+</div>
   );
 };
 
